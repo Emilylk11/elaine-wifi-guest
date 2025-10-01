@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0C9A8E" />
+  <title>Guest Wi-Fi – Coffee Splash</title>
+  <meta name="description" content="Welcome! Tell us your coffee order ☕" />
+  <style>
+    :root{
+      --bg-start:#0C9A8E; --bg-end:#14B8A6; --ink:#111418; --card:#fff; --muted:#6b7280;
+      --ring:#e5e7eb; --accent:#0AA870; --accent-ink:#fff; --radius:18px;
+      --shadow:0 12px 40px rgba(17,20,24,.12); --spacing: clamp(16px, 3vw, 28px);
+      --fs-title: clamp(22px, 5.5vw, 34px); --fs-body: clamp(14px, 3.8vw, 16px); --fs-small: clamp(12px, 3.4vw, 14px); --tap:48px;
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);background:linear-gradient(135deg,var(--bg-start),var(--bg-end));
+      min-height:100svh;display:flex;align-items:center;justify-content:center;
+    }
+    .wrap{width:100%;max-width:960px;padding:var(--spacing)}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-columns:1fr}
+    @media (min-width:900px){ .card{grid-template-columns:1.05fr 1fr} }
+    .visual{
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.20), rgba(0,0,0,.38)),
+        url("https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1400&auto=format&fit=crop")
+        center/cover no-repeat;
+      min-height:44vh;display:flex;align-items:flex-end;gap:10px;padding:18px;color:#fff;
+    }
+    @media (min-width:900px){ .visual{min-height:260px} }
+    .logo{background:#ffffff1a;border:1px solid #ffffff45;color:#fff;padding:10px 14px;border-radius:999px;font-weight:800;backdrop-filter:blur(2px);font-size:var(--fs-small)}
+    .content{padding:var(--spacing)}
+    .eyebrow{font-size:var(--fs-small);color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+    h1{margin:.35rem 0 .4rem;font-size:var(--fs-title);line-height:1.15}
+    p.lead{margin:.25rem 0 1rem;color:#374151;font-size:var(--fs-body)}
+    form{display:grid;gap:14px;margin-top:10px}
+    label{font-weight:650;margin-bottom:6px;display:block;font-size:var(--fs-body)}
+    .row{display:grid;grid-template-columns:1fr;gap:12px}
+    @media (min-width:560px){ .row{grid-template-columns:1fr 1fr} }
+    select,input[type="text"]{
+      width:100%;min-height:var(--tap);padding:12px 14px;border-radius:12px;border:1px solid var(--ring);font:inherit;background:#fff;font-size:var(--fs-body)
+    }
+    .radio-group{display:flex;flex-wrap:wrap;gap:10px}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;min-height:var(--tap);border-radius:999px;border:1px solid var(--ring);cursor:pointer;background:#fff;user-select:none;font-size:var(--fs-body)}
+    .pill input{accent-color:var(--accent);width:18px;height:18px}
+    .cta{margin-top:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    button{
+      appearance:none;border:0;border-radius:999px;min-height:var(--tap);padding:14px 18px;width:100%;
+      font-weight:800;cursor:pointer;font-size:var(--fs-body);background:var(--accent);color:var(--accent-ink);box-shadow:0 10px 24px rgba(10,168,112,.28)
+    }
+    @media (min-width:560px){ button{width:auto} }
+    .tiny{font-size:var(--fs-small);color:var(--muted)}
+    .footer{margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:var(--fs-small)}
+    .footer a{color:inherit;text-decoration:underline}
+    .skip-link{min-height:var(--tap);display:inline-flex;align-items:center}
+    .wrap{padding-left:max(var(--spacing),env(safe-area-inset-left));padding-right:max(var(--spacing),env(safe-area-inset-right))}
+  </style>
+</head>
+<body>
+  <!-- CONFIG: your Google Form (prefill) -->
+  <script>
+    const GOOGLE_FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSdd0-rI22hwHCRkBV9hqIwg-TEXJmX8nEYdNcqncpapkAnAFg/viewform?usp=pp_url";
+    const ENTRY_IDS = {
+      name:   "592292101",   // Name
+      drink:  "981299141",   // Drink
+      almond: "1499600857",  // Almond milk? (Yes/No)
+      syrups: "994605113",   // Syrups
+      notes:  "320377066"    // Notes
+    };
+  </script>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="visual"><span class="logo">Guest Wi-Fi</span></div>
+      <div class="content">
+        <div class="eyebrow">Welcome</div>
+        <h1>What’s your go-to coffee order? ☕</h1>
+        <p class="lead">Fill this quick splash page — your Google Form will be prefilled and ready to submit.</p>
+
+        <form id="coffeeForm" autocomplete="on">
+          <div class="row">
+            <div>
+              <label for="name">Your name (optional)</label>
+              <input id="name" name="name" type="text" placeholder="Alex" autocomplete="name" />
+            </div>
+            <div>
+              <label for="base">Drink</label>
+              <select id="base" name="base" required>
+                <option value="">Choose…</option>
+                <option>Latte</option><option>Americano</option><option>Cold Brew</option>
+                <option>Cappuccino</option><option>Macchiato</option><option>Mocha</option>
+                <option>Espresso</option><option>Iced Tea (non-coffee)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label>Almond milk?</label>
+            <div class="radio-group" role="group" aria-label="Almond milk">
+              <label class="pill"><input type="radio" name="almond" value="Yes" required>Yes</label>
+              <label class="pill"><input type="radio" name="almond" value="No">No</label>
+            </div>
+          </div>
+
+          <div>
+            <label>Syrups</label>
+            <div class="radio-group" role="group" aria-label="Syrups">
+              <label class="pill"><input type="checkbox" name="syrup" value="Vanilla">Vanilla</label>
+              <label class="pill"><input type="checkbox" name="syrup" value="SF Vanilla">SF Vanilla</label>
+              <label class="pill"><input type="checkbox" name="syrup" value="Caramel">Caramel</label>
+              <label class="pill"><input type="checkbox" name="syrup" value="Hazelnut">Hazelnut</label>
+              <label class="pill"><input type="checkbox" name="syrup" value="Mocha">Mocha</label>
+              <label class="pill"><input type="checkbox" name="syrup" value="None">None</label>
+            </div>
+          </div>
+
+          <div>
+            <label for="notes">Notes</label>
+            <input id="notes" name="notes" type="text" placeholder="Extra ice, light syrup, etc." />
+          </div>
+
+          <div class="cta">
+            <button type="submit">Send Order</button>
+            <span class="tiny">We’ll prefill the form — you just tap Submit ✅</span>
+          </div>
+
+          <div class="footer">
+            <span>Made with ❤️ + caffeine</span>
+            <a href="#" id="skipLink" class="skip-link">Skip for now →</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function val(id){ return document.getElementById(id)?.value?.trim() || ""; }
+    function getAll(name){ return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(n=>n.value); }
+    function getRadio(name){ const n = document.querySelector(`input[name="${name}"]:checked`); return n ? n.value : ""; }
+
+    function buildPrefilledURL() {
+      const name   = val("name");
+      const drink  = val("base");
+      const almond = getRadio("almond");
+      const syrups = getAll("syrup");
+      const notes  = val("notes");
+
+      const params = new URLSearchParams();
+      params.set("usp", "pp_url");
+
+      if(ENTRY_IDS.name && name)     params.append(`entry.${ENTRY_IDS.name}`, name);
+      if(ENTRY_IDS.drink && drink)   params.append(`entry.${ENTRY_IDS.drink}`, drink);
+      if(ENTRY_IDS.almond && almond) params.append(`entry.${ENTRY_IDS.almond}`, almond);
+      if(ENTRY_IDS.notes && notes)   params.append(`entry.${ENTRY_IDS.notes}`, notes);
+      if(ENTRY_IDS.syrups && syrups.length){
+        syrups.forEach(v => params.append(`entry.${ENTRY_IDS.syrups}`, v));
+      }
+      return GOOGLE_FORM_BASE + "&" + params.toString();
+    }
+
+    document.getElementById('coffeeForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      location.href = buildPrefilledURL();
+    });
+    document.getElementById('skipLink').addEventListener('click', (e) => {
+      e.preventDefault(); window.history.back();
+    });
+  </script>
+</body>
+</html>
