@@ -153,33 +153,44 @@
     </div>
   </div>
 
-  <script>
-    // Show/hide the "Other syrup" input and set the special marker value
-    const otherToggle = document.getElementById('syrupOtherToggle');
-    const otherInput  = document.getElementById('syrupOtherInput');
-    const otherMarker = document.getElementById('syrupOtherMarker');
+<script>
+  // Show/hide the "Other syrup" input and set the special marker value
+  const otherToggle = document.getElementById('syrupOtherToggle');
+  const otherInput  = document.getElementById('syrupOtherInput');
+  const otherMarker = document.getElementById('syrupOtherMarker');
 
-    function updateOther(){
-      if(otherToggle.checked){
-        otherInput.style.display = 'block';
-        otherMarker.value = '__other_option__';
-      }else{
-        otherInput.style.display = 'none';
-        otherInput.value = '';
-        otherMarker.value = '';
-      }
+  function updateOther(){
+    if(otherToggle.checked){
+      otherInput.style.display = 'block';
+      otherMarker.value = '__other_option__';
+    }else{
+      otherInput.style.display = 'none';
+      otherInput.value = '';
+      otherMarker.value = '';
     }
-    if(otherToggle){ otherToggle.addEventListener('change', updateOther); updateOther(); }
+  }
+  if(otherToggle){ otherToggle.addEventListener('change', updateOther); updateOther(); }
 
-    // Optional: after submit, send users to a custom "thanks" page
-    // document.getElementById('coffeeForm').addEventListener('submit', function(){
-    //   setTimeout(()=>{ window.location.href = '/thanks.html'; }, 600);
-    // });
+  // === Redirect after submit or skip ===
+  const THANK_YOU_URL = "thanks-gif.html"; // relative path in same folder
 
-    // "Skip" link just goes back
-    document.getElementById('skipLink').addEventListener('click', (e) => {
-      e.preventDefault(); window.history.back();
-    });
-  </script>
+  // After submit: wait briefly for background submit, then redirect
+  document.getElementById('coffeeForm').addEventListener('submit', function(){
+    const name = document.getElementById('name').value.trim();
+    const url  = new URL(THANK_YOU_URL, window.location.href);
+    if(name) url.searchParams.set('name', name);
+    setTimeout(()=>{ window.location.href = url.toString(); }, 600);
+  });
+
+  // Skip link: go straight to thank-you page
+  document.getElementById('skipLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const url  = new URL(THANK_YOU_URL, window.location.href);
+    if(name) url.searchParams.set('name', name);
+    window.location.href = url.toString();
+  });
+</script>
+
 </body>
 </html>
