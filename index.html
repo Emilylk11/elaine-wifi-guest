@@ -4,30 +4,39 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0C9A8E" />
-  <title>Guest Wi-Fi – Coffee Splash</title>
+  <title>Guest Wi‑Fi – Coffee Splash</title>
   <meta name="description" content="Welcome! Tell us your coffee order ☕" />
   <style>
     :root{
-      --bg-start:#0C9A8E; --bg-end:#14B8A6; --ink:#111418; --card:#fff; --muted:#6b7280;
+      --bg-start:#FFCCEA; --bg-end:#FFABDB; --ink:#111418; --card:#fff; --muted:#6b7280;
       --ring:#e5e7eb; --accent:#0AA870; --accent-ink:#fff; --radius:18px;
       --shadow:0 12px 40px rgba(17,20,24,.12); --spacing: clamp(16px, 3vw, 28px);
       --fs-title: clamp(22px, 5.5vw, 34px); --fs-body: clamp(14px, 3.8vw, 16px); --fs-small: clamp(12px, 3.4vw, 14px); --tap:48px;
     }
     *{box-sizing:border-box} html,body{height:100%}
     body{
-      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-      color:var(--ink);background:linear-gradient(135deg,var(--bg-start),var(--bg-end));
-      min-height:100svh;display:flex;align-items:center;justify-content:center;
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);
+      background:linear-gradient(135deg,var(--bg-start),var(--bg-end));
+      min-height:100svh;
+      display:flex;
+      align-items:flex-start;         /* FIX: prevent top cut-off */
+      justify-content:center;
+      padding-block:40px;             /* FIX: add top/bottom breathing room */
     }
     .wrap{width:100%;max-width:960px;padding:var(--spacing)}
-    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-columns:1fr}
+    .card{
+      background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;
+      display:grid;grid-template-columns:1fr
+    }
     @media (min-width:900px){ .card{grid-template-columns:1.05fr 1fr} }
     .visual{
       background:
         linear-gradient(to bottom, rgba(0,0,0,.20), rgba(0,0,0,.38)),
-        url("https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1400&auto=format&fit=crop")
+        url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1400&auto=format&fit=crop')
         center/cover no-repeat;
-      min-height:44vh;display:flex;align-items:flex-end;gap:10px;padding:18px;color:#fff;
+      min-height:20vh;display:flex;align-items:flex-end;gap:10px;padding:18px;color:#fff;
     }
     @media (min-width:900px){ .visual{min-height:260px} }
     .logo{background:#ffffff1a;border:1px solid #ffffff45;color:#fff;padding:10px 14px;border-radius:999px;font-weight:800;backdrop-filter:blur(2px);font-size:var(--fs-small)}
@@ -56,74 +65,83 @@
     .footer a{color:inherit;text-decoration:underline}
     .skip-link{min-height:var(--tap);display:inline-flex;align-items:center}
     .wrap{padding-left:max(var(--spacing),env(safe-area-inset-left));padding-right:max(var(--spacing),env(safe-area-inset-right))}
+    /* Make sure long content scrolls within small screens */
+    .content{max-width:700px}
   </style>
 </head>
 <body>
-  <!-- CONFIG: your Google Form (prefill) -->
-  <script>
-    const GOOGLE_FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSdd0-rI22hwHCRkBV9hqIwg-TEXJmX8nEYdNcqncpapkAnAFg/viewform?usp=pp_url";
-    const ENTRY_IDS = {
-      name:   "592292101",   // Name
-      drink:  "981299141",   // Drink
-      almond: "1499600857",  // Almond milk? (Yes/No)
-      syrups: "994605113",   // Syrups
-      notes:  "320377066"    // Notes
-    };
-  </script>
-
   <div class="wrap">
     <div class="card">
-      <div class="visual"><span class="logo">Guest Wi-Fi</span></div>
+      <div class="visual"><span class="logo">Guest Wi‑Fi</span></div>
       <div class="content">
         <div class="eyebrow">Welcome</div>
-        <h1>What’s your go-to coffee order? ☕</h1>
-        <p class="lead">Fill this quick splash page — your Google Form will be prefilled and ready to submit.</p>
+        <h1>What’s your go‑to coffee order? ☕</h1>
+        <p class="lead">Fill this out and we’ll record your order instantly.</p>
 
-        <form id="coffeeForm" autocomplete="on">
+        <!-- DIRECT SUBMIT FORM -->
+        <form id="coffeeForm" method="POST" target="_self"
+              action="https://docs.google.com/forms/d/e/1FAIpQLSdd0-rI22hwHCRkBV9hqIwg-TEXJmX8nEYdNcqncpapkAnAFg/formResponse">
+
           <div class="row">
             <div>
-              <label for="name">Your name (optional)</label>
-              <input id="name" name="name" type="text" placeholder="Alex" autocomplete="name" />
+              <label for="name">Name</label>
+              <input id="name" name="entry.592292101" type="text" placeholder="Emily" autocomplete="name" />
             </div>
             <div>
-              <label for="base">Drink</label>
-              <select id="base" name="base" required>
+              <label for="drink">Drink *</label>
+              <select id="drink" name="entry.981299141" required>
                 <option value="">Choose…</option>
-                <option>Latte</option><option>Americano</option><option>Cold Brew</option>
-                <option>Cappuccino</option><option>Macchiato</option><option>Mocha</option>
-                <option>Espresso</option><option>Iced Tea (non-coffee)</option>
+                <option>Latte</option>
+                <option>Americano</option>
+                <option>Cappuccino</option>
+                <option>Macchiato</option>
+                <option>Espresso</option>
               </select>
             </div>
           </div>
 
           <div>
-            <label>Almond milk?</label>
-            <div class="radio-group" role="group" aria-label="Almond milk">
-              <label class="pill"><input type="radio" name="almond" value="Yes" required>Yes</label>
-              <label class="pill"><input type="radio" name="almond" value="No">No</label>
+            <label>Iced? *</label>
+            <div class="radio-group" role="group" aria-label="Iced">
+              <label class="pill"><input type="radio" name="entry.515954189" value="Yes" required>Yes</label>
+              <label class="pill"><input type="radio" name="entry.515954189" value="No">No</label>
+            </div>
+          </div>
+
+          <div>
+            <label>Almond Milk *</label>
+            <div class="radio-group" role="group" aria-label="Almond Milk">
+              <label class="pill"><input type="radio" name="entry.1499600857" value="Yes" required>Yes</label>
+              <label class="pill"><input type="radio" name="entry.1499600857" value="No">No</label>
             </div>
           </div>
 
           <div>
             <label>Syrups</label>
             <div class="radio-group" role="group" aria-label="Syrups">
-              <label class="pill"><input type="checkbox" name="syrup" value="Vanilla">Vanilla</label>
-              <label class="pill"><input type="checkbox" name="syrup" value="SF Vanilla">SF Vanilla</label>
-              <label class="pill"><input type="checkbox" name="syrup" value="Caramel">Caramel</label>
-              <label class="pill"><input type="checkbox" name="syrup" value="Hazelnut">Hazelnut</label>
-              <label class="pill"><input type="checkbox" name="syrup" value="Mocha">Mocha</label>
-              <label class="pill"><input type="checkbox" name="syrup" value="None">None</label>
+              <label class="pill"><input type="checkbox" name="entry.994605113" value="Cupcake">Cupcake</label>
+              <label class="pill"><input type="checkbox" name="entry.994605113" value="French Vanilla">French Vanilla</label>
+              <label class="pill"><input type="checkbox" name="entry.994605113" value="Twix">Twix</label>
+              <label class="pill"><input type="checkbox" name="entry.994605113" value="Caramel Pumpkin">Caramel Pumpkin</label>
+              <label class="pill"><input type="checkbox" name="entry.994605113" value="Cookie Dough">Cookie Dough</label>
+              <label class="pill"><input type="checkbox" name="entry.994605113" value="None">None</label>
+              <label class="pill">
+                <input type="checkbox" id="syrupOtherToggle" value="__OTHER__">Other
+              </label>
             </div>
+            <!-- Google Forms expects these two when "Other" is used -->
+            <input id="syrupOtherMarker" type="hidden" name="entry.994605113" value="" />
+            <input id="syrupOtherInput" name="entry.994605113.other_option_response" type="text" placeholder="Type other syrup…" style="display:none;margin-top:8px" />
           </div>
 
           <div>
             <label for="notes">Notes</label>
-            <input id="notes" name="notes" type="text" placeholder="Extra ice, light syrup, etc." />
+            <input id="notes" name="entry.320377066" type="text" placeholder="Extra ice, 1 pump, etc." />
           </div>
 
           <div class="cta">
             <button type="submit">Send Order</button>
-            <span class="tiny">We’ll prefill the form — you just tap Submit ✅</span>
+            <span class="tiny">Your order is sent instantly ✅</span>
           </div>
 
           <div class="footer">
@@ -136,34 +154,29 @@
   </div>
 
   <script>
-    function val(id){ return document.getElementById(id)?.value?.trim() || ""; }
-    function getAll(name){ return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(n=>n.value); }
-    function getRadio(name){ const n = document.querySelector(`input[name="${name}"]:checked`); return n ? n.value : ""; }
+    // Show/hide the "Other syrup" input and set the special marker value
+    const otherToggle = document.getElementById('syrupOtherToggle');
+    const otherInput  = document.getElementById('syrupOtherInput');
+    const otherMarker = document.getElementById('syrupOtherMarker');
 
-    function buildPrefilledURL() {
-      const name   = val("name");
-      const drink  = val("base");
-      const almond = getRadio("almond");
-      const syrups = getAll("syrup");
-      const notes  = val("notes");
-
-      const params = new URLSearchParams();
-      params.set("usp", "pp_url");
-
-      if(ENTRY_IDS.name && name)     params.append(`entry.${ENTRY_IDS.name}`, name);
-      if(ENTRY_IDS.drink && drink)   params.append(`entry.${ENTRY_IDS.drink}`, drink);
-      if(ENTRY_IDS.almond && almond) params.append(`entry.${ENTRY_IDS.almond}`, almond);
-      if(ENTRY_IDS.notes && notes)   params.append(`entry.${ENTRY_IDS.notes}`, notes);
-      if(ENTRY_IDS.syrups && syrups.length){
-        syrups.forEach(v => params.append(`entry.${ENTRY_IDS.syrups}`, v));
+    function updateOther(){
+      if(otherToggle.checked){
+        otherInput.style.display = 'block';
+        otherMarker.value = '__other_option__';
+      }else{
+        otherInput.style.display = 'none';
+        otherInput.value = '';
+        otherMarker.value = '';
       }
-      return GOOGLE_FORM_BASE + "&" + params.toString();
     }
+    if(otherToggle){ otherToggle.addEventListener('change', updateOther); updateOther(); }
 
-    document.getElementById('coffeeForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      location.href = buildPrefilledURL();
-    });
+    // Optional: after submit, send users to a custom "thanks" page
+    // document.getElementById('coffeeForm').addEventListener('submit', function(){
+    //   setTimeout(()=>{ window.location.href = '/thanks.html'; }, 600);
+    // });
+
+    // "Skip" link just goes back
     document.getElementById('skipLink').addEventListener('click', (e) => {
       e.preventDefault(); window.history.back();
     });
