@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0C9A8E" />
-  <title>Guest Wi‑Fi – Coffee Splash</title>
+  <title>Guest Wi-Fi – Coffee Splash</title>
   <meta name="description" content="Welcome! Tell us your coffee order ☕" />
   <style>
     :root{
@@ -21,9 +21,9 @@
       background:linear-gradient(135deg,var(--bg-start),var(--bg-end));
       min-height:100svh;
       display:flex;
-      align-items:flex-start;         /* FIX: prevent top cut-off */
+      align-items:flex-start;
       justify-content:center;
-      padding-block:40px;             /* FIX: add top/bottom breathing room */
+      padding-block:40px;
     }
     .wrap{width:100%;max-width:960px;padding:var(--spacing)}
     .card{
@@ -65,20 +65,19 @@
     .footer a{color:inherit;text-decoration:underline}
     .skip-link{min-height:var(--tap);display:inline-flex;align-items:center}
     .wrap{padding-left:max(var(--spacing),env(safe-area-inset-left));padding-right:max(var(--spacing),env(safe-area-inset-right))}
-    /* Make sure long content scrolls within small screens */
     .content{max-width:700px}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
-      <div class="visual"><span class="logo">Guest Wi‑Fi</span></div>
+      <div class="visual"><span class="logo">Guest Wi-Fi</span></div>
       <div class="content">
         <div class="eyebrow">Welcome</div>
-        <h1>What’s your go‑to coffee order? ☕</h1>
+        <h1>What’s your go-to coffee order? ☕</h1>
         <p class="lead">Fill this out and we’ll record your order instantly.</p>
 
-        <!-- DIRECT SUBMIT FORM -->
+        <!-- We keep method/action for semantics, but JS will intercept submit -->
         <form id="coffeeForm" method="POST" target="_self"
               action="https://docs.google.com/forms/d/e/1FAIpQLSdd0-rI22hwHCRkBV9hqIwg-TEXJmX8nEYdNcqncpapkAnAFg/formResponse">
 
@@ -126,12 +125,11 @@
               <label class="pill"><input type="checkbox" name="entry.994605113" value="Cookie Dough">Cookie Dough</label>
               <label class="pill"><input type="checkbox" name="entry.994605113" value="None">None</label>
               <label class="pill">
-                <input type="checkbox" id="syrupOtherToggle" value="__OTHER__">Other
+                <input type="checkbox" id="syrupOtherToggle">Other
               </label>
             </div>
-            <!-- Google Forms expects these two when "Other" is used -->
-            <input id="syrupOtherMarker" type="hidden" name="entry.994605113" value="" />
-            <input id="syrupOtherInput" name="entry.994605113.other_option_response" type="text" placeholder="Type other syrup…" style="display:none;margin-top:8px" />
+            <!-- Only include 'Other' text field; we'll add the special fields in JS if used -->
+            <input id="syrupOtherInput" type="text" placeholder="Type other syrup…" style="display:none;margin-top:8px" />
           </div>
 
           <div>
@@ -154,41 +152,67 @@
   </div>
 
 <script>
-  // Show/hide the "Other syrup" input and set the special marker value
+  /* ===== Show/hide the "Other syrup" input ===== */
   const otherToggle = document.getElementById('syrupOtherToggle');
   const otherInput  = document.getElementById('syrupOtherInput');
-  const otherMarker = document.getElementById('syrupOtherMarker');
 
   function updateOther(){
-    if(otherToggle.checked){
-      otherInput.style.display = 'block';
-      otherMarker.value = '__other_option__';
-    }else{
-      otherInput.style.display = 'none';
-      otherInput.value = '';
-      otherMarker.value = '';
-    }
+    const on = otherToggle && otherToggle.checked;
+    otherInput.style.display = on ? 'block' : 'none';
+    if(!on) otherInput.value = '';
   }
   if(otherToggle){ otherToggle.addEventListener('change', updateOther); updateOther(); }
 
-  // === Redirect after submit or skip ===
-  const THANK_YOU_URL = "const THANK_YOU_URL = "https://emilylk11.github.io/elaine-wifi-guest/thanks-gif.html";
-"; // relative path in same folder
+  /* ===== Background submit + redirect (no Google navigation) ===== */
+  const form          = document.getElementById('coffeeForm');
+  const THANK_YOU_URL = "https://emilylk11.github.io/elaine-wifi-guest/thanks-gif.html";
+  const FORM_ACTION   = "https://docs.google.com/forms/d/e/1FAIpQLSdd0-rI22hwHCRkBV9hqIwg-TEXJmX8nEYdNcqncpapkAnAFg/formResponse";
 
-  // After submit: wait briefly for background submit, then redirect
-  document.getElementById('coffeeForm').addEventListener('submit', function(){
-    const name = document.getElementById('name').value.trim();
-    const url  = new URL(THANK_YOU_URL, window.location.href);
-    if(name) url.searchParams.set('name', name);
-    setTimeout(()=>{ window.location.href = url.toString(); }, 600);
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const fd = new FormData();
+
+    // Basic fields
+    const name  = document.getElementById('name')?.value?.trim();
+    const drink = document.getElementById('drink')?.value;
+    const notes = document.getElementById('notes')?.value?.trim();
+    if(name)  fd.append('entry.592292101', name);
+    if(drink) fd.append('entry.981299141', drink);
+    if(notes) fd.append('entry.320377066', notes);
+
+    // Radios
+    const iced   = document.querySelector('input[name="entry.515954189"]:checked')?.value;
+    const almond = document.querySelector('input[name="entry.1499600857"]:checked')?.value;
+    if(iced)   fd.append('entry.515954189', iced);
+    if(almond) fd.append('entry.1499600857', almond);
+
+    // Syrups (checkboxes)
+    document.querySelectorAll('input[name="entry.994605113"]:checked')
+      .forEach(cb => fd.append('entry.994605113', cb.value));
+
+    // Other syrup (only when used)
+    if (otherToggle && otherToggle.checked && otherInput.value.trim()){
+      fd.append('entry.994605113', '__other_option__');
+      fd.append('entry.994605113.other_option_response', otherInput.value.trim());
+    }
+
+    // Fire-and-forget POST; redirect regardless of result
+    fetch(FORM_ACTION, { method: 'POST', mode: 'no-cors', body: fd })
+      .catch(()=>{})
+      .finally(() => {
+        const url = new URL(THANK_YOU_URL, window.location.href);
+        if(name) url.searchParams.set('name', name);
+        window.location.href = url.toString();
+      });
   });
 
-  // Skip link: go straight to thank-you page
+  // Skip → straight to thank-you (no Google call)
   document.getElementById('skipLink').addEventListener('click', (e) => {
     e.preventDefault();
-    const name = document.getElementById('name').value.trim();
+    const name = (document.getElementById('name')?.value || '').trim();
     const url  = new URL(THANK_YOU_URL, window.location.href);
-    if(name) url.searchParams.set('name', name);
+    if (name) url.searchParams.set('name', name);
     window.location.href = url.toString();
   });
 </script>
