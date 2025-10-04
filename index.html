@@ -26,10 +26,7 @@
       padding-block:40px;
     }
     .wrap{width:100%;max-width:960px;padding:var(--spacing)}
-    .card{
-      background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;
-      display:grid;grid-template-columns:1fr
-    }
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-columns:1fr}
     @media (min-width:900px){ .card{grid-template-columns:1.05fr 1fr} }
     .visual{
       background:
@@ -40,7 +37,7 @@
     }
     @media (min-width:900px){ .visual{min-height:260px} }
     .logo{background:#ffffff1a;border:1px solid #ffffff45;color:#fff;padding:10px 14px;border-radius:999px;font-weight:800;backdrop-filter:blur(2px);font-size:var(--fs-small)}
-    .content{padding:var(--spacing)}
+    .content{padding:var(--spacing);max-width:700px}
     .eyebrow{font-size:var(--fs-small);color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:700}
     h1{margin:.35rem 0 .4rem;font-size:var(--fs-title);line-height:1.15}
     p.lead{margin:.25rem 0 1rem;color:#374151;font-size:var(--fs-body)}
@@ -65,7 +62,6 @@
     .footer a{color:inherit;text-decoration:underline}
     .skip-link{min-height:var(--tap);display:inline-flex;align-items:center}
     .wrap{padding-left:max(var(--spacing),env(safe-area-inset-left));padding-right:max(var(--spacing),env(safe-area-inset-right))}
-    .content{max-width:700px}
   </style>
 </head>
 <body>
@@ -75,20 +71,21 @@
       <div class="content">
         <div class="eyebrow">Welcome</div>
         <h1>What’s your go-to coffee order? ☕</h1>
-        <p class="lead">Fill this out and we’ll record your order instantly.</p>
+        <p class="lead">Fill this out and we’ll email the order in the background, then send you on your way.</p>
 
-        <!-- We keep method/action for semantics, but JS will intercept submit -->
-        <form id="coffeeForm" method="POST" target="_self"
-              action="https://docs.google.com/forms/d/e/1FAIpQLSdd0-rI22hwHCRkBV9hqIwg-TEXJmX8nEYdNcqncpapkAnAFg/formResponse">
+        <!-- FORM: now handled by JS → Formspree -->
+        <form id="coffeeForm" novalidate>
+          <!-- Honeypot anti-spam -->
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
 
           <div class="row">
             <div>
               <label for="name">Name</label>
-              <input id="name" name="entry.592292101" type="text" placeholder="Jane Doe" autocomplete="name" />
+              <input id="name" type="text" placeholder="Jane Doe" autocomplete="name" />
             </div>
             <div>
               <label for="drink">Drink *</label>
-              <select id="drink" name="entry.981299141" required>
+              <select id="drink" required>
                 <option value="">Choose…</option>
                 <option>Latte</option>
                 <option>Americano</option>
@@ -102,44 +99,43 @@
           <div>
             <label>Iced? *</label>
             <div class="radio-group" role="group" aria-label="Iced">
-              <label class="pill"><input type="radio" name="entry.515954189" value="Yes" required>Yes</label>
-              <label class="pill"><input type="radio" name="entry.515954189" value="No">No</label>
+              <label class="pill"><input type="radio" name="iced" value="Yes" required>Yes</label>
+              <label class="pill"><input type="radio" name="iced" value="No">No</label>
             </div>
           </div>
 
           <div>
             <label>Almond Milk *</label>
             <div class="radio-group" role="group" aria-label="Almond Milk">
-              <label class="pill"><input type="radio" name="entry.1499600857" value="Yes" required>Yes</label>
-              <label class="pill"><input type="radio" name="entry.1499600857" value="No">No</label>
+              <label class="pill"><input type="radio" name="almond" value="Yes" required>Yes</label>
+              <label class="pill"><input type="radio" name="almond" value="No">No</label>
             </div>
           </div>
 
           <div>
             <label>Syrups</label>
             <div class="radio-group" role="group" aria-label="Syrups">
-              <label class="pill"><input type="checkbox" name="entry.994605113" value="Cupcake">Cupcake</label>
-              <label class="pill"><input type="checkbox" name="entry.994605113" value="French Vanilla">French Vanilla</label>
-              <label class="pill"><input type="checkbox" name="entry.994605113" value="Twix">Twix</label>
-              <label class="pill"><input type="checkbox" name="entry.994605113" value="Caramel Pumpkin">Caramel Pumpkin</label>
-              <label class="pill"><input type="checkbox" name="entry.994605113" value="Cookie Dough">Cookie Dough</label>
-              <label class="pill"><input type="checkbox" name="entry.994605113" value="None">None</label>
+              <label class="pill"><input type="checkbox" name="syrup" value="Cupcake">Cupcake</label>
+              <label class="pill"><input type="checkbox" name="syrup" value="French Vanilla">French Vanilla</label>
+              <label class="pill"><input type="checkbox" name="syrup" value="Twix">Twix</label>
+              <label class="pill"><input type="checkbox" name="syrup" value="Caramel Pumpkin">Caramel Pumpkin</label>
+              <label class="pill"><input type="checkbox" name="syrup" value="Cookie Dough">Cookie Dough</label>
+              <label class="pill"><input type="checkbox" name="syrup" value="None">None</label>
               <label class="pill">
-                <input type="checkbox" id="syrupOtherToggle">Other
+                <input type="checkbox" id="syrupOtherToggle" value="__OTHER__">Other
               </label>
             </div>
-            <!-- Only include 'Other' text field; we'll add the special fields in JS if used -->
             <input id="syrupOtherInput" type="text" placeholder="Type other syrup…" style="display:none;margin-top:8px" />
           </div>
 
           <div>
             <label for="notes">Notes</label>
-            <input id="notes" name="entry.320377066" type="text" placeholder="Extra ice, 1 pump, etc." />
+            <input id="notes" type="text" placeholder="Extra ice, 1 pump, etc." />
           </div>
 
           <div class="cta">
             <button type="submit">Send Order</button>
-            <span class="tiny">Your order is sent instantly ✅</span>
+            <span class="tiny">Submitting… then we’ll bounce you to the thank-you page ✅</span>
           </div>
 
           <div class="footer">
@@ -151,71 +147,81 @@
     </div>
   </div>
 
-<script>
-  /* ===== Show/hide the "Other syrup" input ===== */
-  const otherToggle = document.getElementById('syrupOtherToggle');
-  const otherInput  = document.getElementById('syrupOtherInput');
+  <script>
+    /* ------------ CONFIG ------------ */
+    const FORMSPREE_ENDPOINT = "https://formspree.io/f/xyzabcd";  // ← replace with your Formspree form ID URL
+    const THANKS_URL = "thanks.html";                             // ← change if hosted elsewhere
 
-  function updateOther(){
-    const on = otherToggle && otherToggle.checked;
-    otherInput.style.display = on ? 'block' : 'none';
-    if(!on) otherInput.value = '';
-  }
-  if(otherToggle){ otherToggle.addEventListener('change', updateOther); updateOther(); }
+    /* Show/hide the "Other syrup" input */
+    const otherToggle = document.getElementById('syrupOtherToggle');
+    const otherInput  = document.getElementById('syrupOtherInput');
+    function updateOther(){
+      if(otherToggle.checked){ otherInput.style.display='block'; }
+      else { otherInput.style.display='none'; otherInput.value=''; }
+    }
+    if(otherToggle){ otherToggle.addEventListener('change', updateOther); updateOther(); }
 
-  /* ===== Background submit + redirect (no Google navigation) ===== */
-  const form          = document.getElementById('coffeeForm');
-  const THANK_YOU_URL = "https://emilylk11.github.io/elaine-wifi-guest/thanks-gif.html";
-  const FORM_ACTION   = "https://docs.google.com/forms/d/e/1FAIpQLSdd0-rI22hwHCRkBV9hqIwg-TEXJmX8nEYdNcqncpapkAnAFg/formResponse";
+    /* Collect data in a friendly shape */
+    function collectData(){
+      const name   = document.getElementById('name').value.trim();
+      const drink  = document.getElementById('drink').value;
+      const iced   = (document.querySelector('input[name="iced"]:checked')||{}).value || "";
+      const almond = (document.querySelector('input[name="almond"]:checked')||{}).value || "";
+      const syrups = Array.from(document.querySelectorAll('input[name="syrup"]:checked')).map(n=>n.value);
+      const other  = otherToggle.checked && otherInput.value.trim() ? `Other: ${otherInput.value.trim()}` : "";
+      const notes  = document.getElementById('notes').value.trim();
 
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-
-    const fd = new FormData();
-
-    // Basic fields
-    const name  = document.getElementById('name')?.value?.trim();
-    const drink = document.getElementById('drink')?.value;
-    const notes = document.getElementById('notes')?.value?.trim();
-    if(name)  fd.append('entry.592292101', name);
-    if(drink) fd.append('entry.981299141', drink);
-    if(notes) fd.append('entry.320377066', notes);
-
-    // Radios
-    const iced   = document.querySelector('input[name="entry.515954189"]:checked')?.value;
-    const almond = document.querySelector('input[name="entry.1499600857"]:checked')?.value;
-    if(iced)   fd.append('entry.515954189', iced);
-    if(almond) fd.append('entry.1499600857', almond);
-
-    // Syrups (checkboxes)
-    document.querySelectorAll('input[name="entry.994605113"]:checked')
-      .forEach(cb => fd.append('entry.994605113', cb.value));
-
-    // Other syrup (only when used)
-    if (otherToggle && otherToggle.checked && otherInput.value.trim()){
-      fd.append('entry.994605113', '__other_option__');
-      fd.append('entry.994605113.other_option_response', otherInput.value.trim());
+      const comboSyrups = [ ...syrups, ...(other ? [other] : []) ].join(', ');
+      return { name, drink, iced, almond, syrups: comboSyrups, notes };
     }
 
-    // Fire-and-forget POST; redirect regardless of result
-    fetch(FORM_ACTION, { method: 'POST', mode: 'no-cors', body: fd })
-      .catch(()=>{})
-      .finally(() => {
-        const url = new URL(THANK_YOU_URL, window.location.href);
-        if(name) url.searchParams.set('name', name);
-        window.location.href = url.toString();
-      });
-  });
+    /* Handle submit → send to Formspree → redirect */
+    document.getElementById('coffeeForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
 
-  // Skip → straight to thank-you (no Google call)
-  document.getElementById('skipLink').addEventListener('click', (e) => {
-    e.preventDefault();
-    const name = (document.getElementById('name')?.value || '').trim();
-    const url  = new URL(THANK_YOU_URL, window.location.href);
-    if (name) url.searchParams.set('name', name);
-    window.location.href = url.toString();
-  });
-</script>
+      // Simple required validation for the two required groups
+      if(!document.getElementById('drink').value ||
+         !document.querySelector('input[name="iced"]:checked') ||
+         !document.querySelector('input[name="almond"]:checked')){
+        alert("Please choose a drink, and answer Iced + Almond Milk.");
+        return;
+      }
 
+      const payload = collectData();
+
+      try{
+        const res = await fetch(FORMSPREE_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name: payload.name,
+            drink: payload.drink,
+            iced: payload.iced,
+            almond_milk: payload.almond,
+            syrups: payload.syrups,
+            notes: payload.notes,
+            _subject: "New Coffee Order from Guest Wi-Fi"
+          })
+        });
+
+        if(res.ok){
+          window.location.href = THANKS_URL; // 🚀 straight to thank-you
+        }else{
+          const msg = await res.text();
+          alert("Submission error — please try again.\n\n" + msg);
+        }
+      }catch(err){
+        alert("Network hiccup — try again in a sec.");
+      }
+    });
+
+    // "Skip" link just goes back
+    document.getElementById('skipLink').addEventListener('click', (e) => {
+      e.preventDefault(); window.history.back();
+    });
+  </script>
 </body>
 </html>
