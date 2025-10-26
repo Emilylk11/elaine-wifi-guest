@@ -1,214 +1,439 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0C9A8E" />
-  <title>Guest Wi-Fi – Coffee Splash</title>
-  <meta name="description" content="Welcome! Tell us your coffee order ☕" />
-  <style>
-    :root{
-      --bg-start:#FFCCEA; --bg-end:#FFABDB; --ink:#111418; --card:#fff; --muted:#6b7280;
-      --ring:#e5e7eb; --accent:#0AA870; --accent-ink:#fff; --radius:18px;
-      --shadow:0 12px 40px rgba(17,20,24,.12); --spacing: clamp(16px, 3vw, 28px);
-      --fs-title: clamp(22px, 5.5vw, 34px); --fs-body: clamp(14px, 3.8vw, 16px); --fs-small: clamp(12px, 3.4vw, 14px); --tap:48px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      color:var(--ink);
-      background:linear-gradient(135deg,var(--bg-start),var(--bg-end));
-      min-height:100svh;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding-block:40px;
-    }
-    .wrap{width:100%;max-width:960px;padding:var(--spacing)}
-    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-columns:1fr}
-    @media (min-width:900px){ .card{grid-template-columns:1.05fr 1fr} }
-    .visual{
-      background:
-        linear-gradient(to bottom, rgba(0,0,0,.20), rgba(0,0,0,.38)),
-        url('https://emilylk11.github.io/elaine-wifi-guest/apt-kitchen.jpg')
-        center/cover no-repeat;
-      min-height:20vh;display:flex;align-items:flex-end;gap:10px;padding:18px;color:#fff;
-    }
-    @media (min-width:900px){ .visual{min-height:260px} }
-    .logo{background:#ffffff1a;border:1px solid #ffffff45;color:#fff;padding:10px 14px;border-radius:999px;font-weight:800;backdrop-filter:blur(2px);font-size:var(--fs-small)}
-    .content{padding:var(--spacing);max-width:700px}
-    .eyebrow{font-size:var(--fs-small);color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:700}
-    h1{margin:.35rem 0 .4rem;font-size:var(--fs-title);line-height:1.15}
-    p.lead{margin:.25rem 0 1rem;color:#374151;font-size:var(--fs-body)}
-    form{display:grid;gap:14px;margin-top:10px}
-    label{font-weight:650;margin-bottom:6px;display:block;font-size:var(--fs-body)}
-    .row{display:grid;grid-template-columns:1fr;gap:12px}
-    @media (min-width:560px){ .row{grid-template-columns:1fr 1fr} }
-    select,input[type="text"]{
-      width:100%;min-height:var(--tap);padding:12px 14px;border-radius:12px;border:1px solid var(--ring);font:inherit;background:#fff;font-size:var(--fs-body)
-    }
-    .radio-group{display:flex;flex-wrap:wrap;gap:10px}
-    .pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;min-height:var(--tap);border-radius:999px;border:1px solid var(--ring);cursor:pointer;background:#fff;user-select:none;font-size:var(--fs-body)}
-    .pill input{accent-color:var(--accent);width:18px;height:18px}
-    .cta{margin-top:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    button{
-      appearance:none;border:0;border-radius:999px;min-height:var(--tap);padding:14px 18px;width:100%;
-      font-weight:800;cursor:pointer;font-size:var(--fs-body);background:var(--accent);color:var(--accent-ink);box-shadow:0 10px 24px rgba(10,168,112,.28)
-    }
-    @media (min-width:560px){ button{width:auto} }
-    .tiny{font-size:var(--fs-small);color:var(--muted)}
-    .footer{margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:var(--fs-small)}
-    .footer a{color:inherit;text-decoration:underline}
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.2">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="visual"><span class="logo">Guest Wi-Fi</span></div>
-      <div class="content">
-        <div class="eyebrow">Welcome</div>
-        <h1>What’s your go-to coffee order? ☕</h1>
-        <p class="lead">Fill this out and we’ll email the order in the background, then send you on your way.</p>
-
-        <form id="coffeeForm" novalidate>
-          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-
-          <div class="row">
-            <div>
-              <label for="name">Name</label>
-              <input id="name" type="text" placeholder="Jane Doe" autocomplete="name" />
-            </div>
-            <div>
-              <label for="drink">Drink *</label>
-              <select id="drink" required>
-                <option value="">Choose…</option>
-                <option>Latte</option>
-                <option>Americano</option>
-                <option>Cappuccino</option>
-                <option>Macchiato</option>
-                <option>Espresso</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label>Iced? *</label>
-            <div class="radio-group" role="group" aria-label="Iced">
-              <label class="pill"><input type="radio" name="iced" value="Yes" required>Yes</label>
-              <label class="pill"><input type="radio" name="iced" value="No">No</label>
-            </div>
-          </div>
-
-          <div>
-            <label>Almond Milk *</label>
-            <div class="radio-group" role="group" aria-label="Almond Milk">
-              <label class="pill"><input type="radio" name="almond" value="Yes" required>Yes</label>
-              <label class="pill"><input type="radio" name="almond" value="No">No</label>
-            </div>
-          </div>
-
-          <div>
-            <label>Syrups</label>
-            <div class="radio-group" role="group" aria-label="Syrups">
-              <label class="pill"><input type="checkbox" name="syrup" value="Cupcake">Cupcake</label>
-              <label class="pill"><input type="checkbox" name="syrup" value="French Vanilla">French Vanilla</label>
-              <label class="pill"><input type="checkbox" name="syrup" value="Twix">Twix</label>
-              <label class="pill"><input type="checkbox" name="syrup" value="Caramel Pumpkin">Caramel Pumpkin</label>
-              <label class="pill"><input type="checkbox" name="syrup" value="Cookie Dough">Cookie Dough</label>
-              <label class="pill"><input type="checkbox" name="syrup" value="None">None</label>
-              <label class="pill"><input type="checkbox" id="syrupOtherToggle" value="__OTHER__">Other</label>
-            </div>
-            <input id="syrupOtherInput" type="text" placeholder="Type other syrup…" style="display:none;margin-top:8px" />
-          </div>
-
-          <div>
-            <label for="notes">Notes</label>
-            <input id="notes" type="text" placeholder="Extra ice, 1 pump, etc." />
-          </div>
-
-          <div class="cta">
-            <button type="submit">Send Order</button>
-            <span class="tiny">Submitting… then we’ll bounce you to the thank-you page ✅</span>
-          </div>
-
-          <div class="footer">
-            <span>Made with ❤️ + caffeine</span>
-            <a href="thanks.html" id="skipLink" class="skip-link">Skip for now →</a>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const FORMSPREE_ENDPOINT = "https://formspree.io/f/xyzabcd"; // replace with your endpoint
-    const THANKS_URL = "thanks.html";
-
-    const otherToggle = document.getElementById('syrupOtherToggle');
-    const otherInput = document.getElementById('syrupOtherInput');
-    function updateOther(){
-      if(otherToggle.checked){ otherInput.style.display='block'; }
-      else { otherInput.style.display='none'; otherInput.value=''; }
-    }
-    if(otherToggle){ otherToggle.addEventListener('change', updateOther); updateOther(); }
-
-    function collectData(){
-      const name   = document.getElementById('name').value.trim();
-      const drink  = document.getElementById('drink').value;
-      const iced   = (document.querySelector('input[name="iced"]:checked')||{}).value || "";
-      const almond = (document.querySelector('input[name="almond"]:checked')||{}).value || "";
-      const syrups = Array.from(document.querySelectorAll('input[name="syrup"]:checked')).map(n=>n.value);
-      const other  = otherToggle.checked && otherInput.value.trim() ? `Other: ${otherInput.value.trim()}` : "";
-      const notes  = document.getElementById('notes').value.trim();
-
-      const comboSyrups = [ ...syrups, ...(other ? [other] : []) ].join(', ');
-      return { name, drink, iced, almond, syrups: comboSyrups, notes };
-    }
-
-    document.getElementById('coffeeForm').addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      if(!document.getElementById('drink').value ||
-         !document.querySelector('input[name="iced"]:checked') ||
-         !document.querySelector('input[name="almond"]:checked')){
-        alert("Please choose a drink, and answer Iced + Almond Milk.");
-        return;
-      }
-
-      const payload = collectData();
-
-      try{
-        const res = await fetch(FORMSPREE_ENDPOINT, {
-          method: "POST",
-          headers: { "Accept": "application/json", "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: payload.name,
-            drink: payload.drink,
-            iced: payload.iced,
-            almond_milk: payload.almond,
-            syrups: payload.syrups,
-            notes: payload.notes,
-            _subject: "New Coffee Order from Guest Wi-Fi"
-          })
-        });
-
-        if(res.ok){
-          window.location.href = THANKS_URL;
-        }else{
-          const msg = await res.text();
-          alert("Submission error — please try again.\n\n" + msg);
-        }
-      }catch(err){
-        alert("Network hiccup — try again in a sec.");
-      }
-    });
-
-    // ✅ FIXED: skip goes to thank-you page
-    document.getElementById('skipLink').addEventListener('click', (e) => {
-      e.preventDefault();
-      window.location.href = THANKS_URL;
-    });
-  </script>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="utf-8" /&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" /&gt;</p>
+<p class="p1">&lt;title&gt;Welcome! Wi-Fi Guestbook &amp; Trivia&lt;/title&gt;</p>
+<p class="p1">&lt;meta name="description" content="Sign the Wi-Fi guestbook and ace a mini trivia — now in soft pastel pink." /&gt;</p>
+<p class="p1">&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;</p>
+<p class="p1">&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ======================== THEME TOKENS (pastel pink edition) ======================== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>:root{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--ink:#111418; --muted:#6b7280; --card:#fff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--bg:#fff5f8; <span class="Apple-converted-space">                      </span>/* base canvas */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--brand:#FF7DAF;<span class="Apple-converted-space">                    </span>/* soft rose pink */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--brand-ink:#ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--accent:#FF9FB2; <span class="Apple-converted-space">                  </span>/* cotton-candy coral/pink */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--accent-2:#F8D9E6; <span class="Apple-converted-space">                </span>/* very light pink */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--mint:#67DEC7; <span class="Apple-converted-space">                    </span>/* keep tiny mint for micro-highlights */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--ring:#F2E6EB;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--shadow:0 12px 40px rgba(17,20,24,.10);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--radius:18px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--radius-sm:12px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--maxw:1100px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>#splash-app{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>color:var(--ink);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background:</p>
+<p class="p1"><span class="Apple-converted-space">      </span>radial-gradient(1200px 800px at 10% 0%, #ffe9f1 0%, transparent 60%),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>radial-gradient(1200px 800px at 100% 20%, #fff2f7 0%, transparent 60%),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var(--bg);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>min-height: 100svh;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ======================== GLOBAL LAYOUT ======================== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.container{ width:min(92vw, var(--maxw)); margin-inline:auto; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>header.site{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>position:sticky; top:0; z-index:50; backdrop-filter: blur(8px);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background: color-mix(in srgb, #fff 78%, transparent);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border-bottom:1px solid var(--ring);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.site__inner{ display:flex; gap:16px; align-items:center; justify-content:space-between; padding:12px 0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.brand{ font-weight:800; letter-spacing:.2px; font-size: clamp(18px, 2vw, 22px); display:flex; gap:10px; align-items:center;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.brand-dot{ width:10px; height:10px; border-radius:999px; background:linear-gradient(135deg, var(--brand), var(--accent)); box-shadow:0 0 0 3px color-mix(in srgb, var(--brand) 25%, transparent); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* Buttons */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>appearance:none; border:0; background:var(--brand); color:var(--brand-ink);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding:12px 16px; border-radius:999px; font-weight:700; cursor:pointer;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>box-shadow: 0 8px 24px color-mix(in srgb, var(--brand) 30%, transparent);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>transition: transform .06s ease, box-shadow .2s ease, background .2s ease;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn:hover{ transform: translateY(-1px); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn.secondary{ background:#fff; color:var(--ink); border:1px solid var(--ring); box-shadow:none; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn.ghost{ background:transparent; color:var(--ink); border:1px solid var(--ring); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>section.block{ padding: clamp(28px, 4vw, 56px) 0; scroll-margin-top: 78px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background: var(--card);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border:1px solid var(--ring);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border-radius: var(--radius);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>box-shadow: var(--shadow);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.grid{ display:grid; gap: clamp(14px, 2vw, 24px); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>h1, h2{ letter-spacing:.2px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>h1{ font-size: clamp(28px, 4vw, 40px); line-height:1.1; margin:8px 0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>h2{ font-size: clamp(22px, 3vw, 30px); line-height:1.2; margin:0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>p.lead{ color:var(--muted); max-width: 62ch; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ======================== NAVIGATION (desktop + hamburger mobile) ======================== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>nav.primary a{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>display:inline-block; padding:10px 14px; border-radius:999px; text-decoration:none; color:var(--ink);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border:1px solid transparent;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>nav.primary a:hover{ background:#fff; border-color: var(--ring); box-shadow: var(--shadow); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* Hamburger button (shown on &lt;= 860px) */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.menu-btn{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>display:none; align-items:center; justify-content:center;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>width:44px; height:44px; border-radius:12px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border:1px solid var(--ring); background:#fff; cursor:pointer;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.menu-btn svg{ width:22px; height:22px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@media (max-width: 860px){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>nav.primary{ display:none; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.menu-btn{ display:flex; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* Mobile panel */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.mobile-panel{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>position:absolute; inset:auto 0 auto auto; top:60px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background:#fff; border:1px solid var(--ring); border-radius:16px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>box-shadow: var(--shadow); padding:8px; width: min(92vw, 320px); display:none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.mobile-panel.open{ display:block; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.mobile-panel a{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>display:block; padding:12px 14px; border-radius:12px; text-decoration:none; color:var(--ink);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.mobile-panel a:hover{ background: color-mix(in srgb, var(--accent-2) 40%, white); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ======================== SECTION: GUESTBOOK ======================== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.guestbook{ display:grid; gap:22px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.guestbook__wrap{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>display:grid; grid-template-columns: 1.1fr .9fr; gap:24px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@media (max-width: 900px){ .guestbook__wrap{ grid-template-columns: 1fr; } }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>.form{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding:24px; display:grid; gap:16px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background: linear-gradient(135deg, #fff, var(--accent-2));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.field{ display:grid; gap:8px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.field label{ font-weight:600; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.input, .textarea{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border:1px solid var(--ring); border-radius:12px; padding:12px 14px; font: inherit; background:#fff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.textarea{ min-height: 96px; resize: vertical; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.inline{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>.wall{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding:0; overflow:hidden; position:relative;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background: linear-gradient(135deg, #fff, #ffeef5);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.wall__header{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid var(--ring);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.chips{ display:flex; gap:8px; flex-wrap:wrap; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.chip{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background: color-mix(in srgb, var(--accent) 18%, white);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border:1px dashed color-mix(in srgb, var(--accent) 45%, #ccc);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding:10px 12px; border-radius:999px; font-weight:600; font-size:14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.wall__scroller{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>position:relative; height: 260px; padding: 16px 20px; display:grid; place-items:center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.wall__msg{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>opacity:0; transform: translateY(6px) scale(.98);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>transition: opacity .45s ease, transform .45s ease;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>position:absolute; inset: 0; display:grid; place-items:center; padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.wall__msg.active{ opacity:1; transform: translateY(0) scale(1); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.msg{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>max-width: 60ch; background: #fff; border:1px solid var(--ring); border-radius:16px; padding:16px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>box-shadow: var(--shadow);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.msg small{ color:var(--muted); display:block; margin-top:6px; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ======================== SECTION: TRIVIA ======================== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.trivia{ display:grid; gap:18px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.quiz{ padding: 22px; display:grid; gap:18px; background: linear-gradient(135deg, #fff, #fff4f8); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.progress{ width:100%; height: 10px; background:#f8f1f5; border-radius: 999px; overflow:hidden; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.bar{ height:100%; width:0%; background: linear-gradient(90deg, var(--brand), var(--accent)); transition: width .35s ease; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.q{ background: #fff; border:1px solid var(--ring); border-radius:14px; padding:16px; display:grid; gap:14px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.answers{ display:grid; gap:10px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.answer{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>display:flex; gap:12px; align-items:center; padding:12px 14px; border-radius:12px; border:1px solid var(--ring); cursor:pointer;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>transition: transform .06s ease, border-color .2s ease, background .2s ease;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.answer:hover{ transform: translateY(-1px); background:#fff; border-color: color-mix(in srgb, var(--brand) 35%, var(--ring)); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.answer input{ accent-color: var(--brand); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.quiz__cta{ display:flex; gap:10px; flex-wrap:wrap; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.notice{ font-weight:700; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.notice.ok{ color: #1a7f37; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.notice.nope{ color: #b91c1c; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* Confetti canvas */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>#confetti{ position: fixed; inset:0; pointer-events:none; z-index: 999; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ======================== FOOTER ======================== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>footer{ color:var(--muted); padding: 40px 0 56px; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* Utility */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.center{ text-align:center; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.spacer{ height: 8px; }</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body id="splash-app"&gt;</p>
+<p class="p1">&lt;canvas id="confetti" aria-hidden="true"&gt;&lt;/canvas&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;header class="site" id="site-header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="container site__inner"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="brand"&gt;&lt;span class="brand-dot" aria-hidden="true"&gt;&lt;/span&gt; Emily’s Wi-Fi Splash&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Desktop nav --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav class="primary" aria-label="Section navigation"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;a href="#guestbook"&gt;Guestbook&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;a href="#trivia"&gt;Trivia&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Mobile hamburger --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-panel"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/button&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Mobile panel --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="mobile-panel" id="mobile-panel" role="dialog" aria-modal="false" aria-labelledby="mobile-menu-title"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="padding:6px 10px 2px 10px; color:var(--muted); font-weight:700;" id="mobile-menu-title"&gt;Menu&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;a href="#guestbook"&gt;Guestbook&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;a href="#trivia"&gt;Trivia&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;main&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- ======================== SECTION 1: WI-FI GUESTBOOK ======================== --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section id="guestbook" class="block"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="container guestbook"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1&gt;Welcome! Sign my Wi-Fi Guestbook 💬&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p class="lead"&gt;Drop a short message or inside joke for the wall. New notes rotate so everyone sees the latest vibes.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="guestbook__wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Form --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;form id="gb-form" class="card form" autocomplete="on" novalidate&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="field"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label for="gb-name"&gt;Name or Nickname&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input id="gb-name" class="input" name="name" placeholder="e.g., Em, Sam, Sneaky Link #7" maxlength="32" required /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="field"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label for="gb-msg"&gt;Your message&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;textarea id="gb-msg" class="textarea" name="message" placeholder="Keep it short &amp; sweet ✨" maxlength="100" required&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="inline"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="btn" type="submit"&gt;Post to Wall&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="btn ghost" type="button" id="gb-random"&gt;I’m Feeling Lucky&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="gb-status" aria-live="polite"&gt;&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/form&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Message Wall --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;aside class="card wall" aria-live="polite"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="wall__header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 style="margin:0"&gt;Recent Messages&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="chips" id="gb-chip-count"&gt;&lt;span class="chip"&gt;0 notes&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="wall__scroller" id="gb-rotator"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/aside&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- ======================== SECTION 2: TRIVIA ======================== --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section id="trivia" class="block"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="container trivia"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Unlock Your Wi-Fi 🔐&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p class="lead"&gt;Answer 4 quick questions. Get at least 3 right for a celebratory confetti burst and bragging rights.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card quiz" id="quiz"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="progress" aria-hidden="true"&gt;&lt;div class="bar" id="quiz-bar"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="quiz-stage"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="quiz__cta"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button class="btn" id="quiz-next" disabled&gt;Next&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button class="btn secondary" id="quiz-restart" hidden&gt;Play Again&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span id="quiz-feedback" class="notice" aria-live="polite"&gt;&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p1">&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;footer class="center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;Made with ☕ and ✨ by Emily.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/footer&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">/* Helpers */</p>
+<p class="p1">const $ = (sel, ctx=document) =&gt; ctx.querySelector(sel);</p>
+<p class="p1">const $$ = (sel, ctx=document) =&gt; Array.from(ctx.querySelectorAll(sel));</p>
+<p class="p2"><br></p>
+<p class="p1">/* ========================= Mobile hamburger ========================= */</p>
+<p class="p1">const menuBtn = $('#menu-btn');</p>
+<p class="p1">const panel = $('#mobile-panel');</p>
+<p class="p1">menuBtn?.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const open = panel.classList.toggle('open');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>menuBtn.setAttribute('aria-expanded', String(open));</p>
+<p class="p1">});</p>
+<p class="p1">panel?.querySelectorAll('a').forEach(a=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>a.addEventListener('click', ()=&gt;{ panel.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); });</p>
+<p class="p1">});</p>
+<p class="p1">document.addEventListener('click', (e)=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!panel.contains(e.target) &amp;&amp; !menuBtn.contains(e.target)){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>panel.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">/* ========================= Guestbook ========================= */</p>
+<p class="p1">const GB_KEY = 'emily_guestbook_v1';</p>
+<p class="p1">const defaultSeeds = [</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{name:'Mama', message:'Best Wi-Fi in Texas!'},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{name:'Sam', message:'If you can read this, bring snacks 😄'},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{name:'Nikki Wikki', message:'Scary movie night queue: Jeepers Creepers, where\'d ya get those peepersss.'},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{name:'Imaginary Roomie', message:'Password strength: immaculate.'},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{name:'Dad', message:'Leave the A/C alone.'},</p>
+<p class="p1">];</p>
+<p class="p1">function getNotes(){ try{ const raw = localStorage.getItem(GB_KEY); return raw ? JSON.parse(raw) : defaultSeeds; }catch(e){ return defaultSeeds; } }</p>
+<p class="p1">function setNotes(arr){ localStorage.setItem(GB_KEY, JSON.stringify(arr.slice(0,100))); }</p>
+<p class="p1">function addNote(name, message){ const notes = getNotes(); notes.unshift({name:name.trim(), message:message.trim()}); setNotes(notes); renderWall(); }</p>
+<p class="p1">function renderWall(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const notes = getNotes();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('#gb-chip-count').innerHTML = `&lt;span class="chip"&gt;${notes.length} note${notes.length!==1?'s':''}&lt;/span&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const rotator = $('#gb-rotator'); rotator.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>notes.slice(0,6).forEach((n,i)=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const div = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>div.className = 'wall__msg' + (i===0?' active':'');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>div.innerHTML = `&lt;div class="msg"&gt;&lt;div&gt;${escapeHtml(n.message)}&lt;/div&gt;&lt;small&gt;— ${escapeHtml(n.name)}&lt;/small&gt;&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rotator.appendChild(div);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">}</p>
+<p class="p1">function rotateWall(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const slides = $$('.wall__msg', $('#gb-rotator')); if (slides.length&lt;=1) return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let idx = slides.findIndex(el =&gt; el.classList.contains('active'));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>slides[idx].classList.remove('active'); slides[(idx+1)%slides.length].classList.add('active');</p>
+<p class="p1">}</p>
+<p class="p1">let wallTimer = setInterval(rotateWall, 3500);</p>
+<p class="p1">function escapeHtml(str){ return str.replace(/[&amp;&lt;&gt;"']/g, m =&gt; ({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;', "'":'&amp;#39;'}[m])); }</p>
+<p class="p2"><br></p>
+<p class="p1">const gbForm = $('#gb-form'); const gbStatus = $('#gb-status');</p>
+<p class="p1">$('#gb-random').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const randoms = ['Great vibes only ✌️','Send memes','Be kind. Rewind.','Cue the playlist 🎶','Wi-Fi so fast it finished this note for me','Got snacks?','This place = 10/10'];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('#gb-name').value = 'Guest ' + Math.floor(100 + Math.random()*900);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('#gb-msg').value = randoms[(Math.random()*randoms.length)|0];</p>
+<p class="p1">});</p>
+<p class="p1">gbForm.addEventListener('submit', (e)=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const name = $('#gb-name').value || 'Guest';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const msg<span class="Apple-converted-space">  </span>= $('#gb-msg').value || '';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!msg.trim()){ gbStatus.textContent='Please add a short message.'; gbStatus.style.color='#b91c1c'; return; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (msg.trim().length&gt;100){ gbStatus.textContent='Message too long (max 100).'; gbStatus.style.color='#b91c1c'; return; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>addNote(name, msg); gbStatus.textContent='Posted! 🎉'; gbStatus.style.color='#1a7f37'; gbForm.reset();</p>
+<p class="p1">});</p>
+<p class="p1">renderWall();</p>
+<p class="p2"><br></p>
+<p class="p1">/* ========================= Trivia ========================= */</p>
+<p class="p1">const QUIZ = [</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ q:'Who is Emily\'s favorite artist?', a:['Tate McRae','Ariana Grande','Justin Bieber','The Kid Laroi'], c:2 },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ q:'What is my favorite food?', a:['Soul Food','Pizza','Bread','Pasta'], c:0 },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ q:'What do I do for work?', a:['Graphic Design','Marketing and Web Design','Project Management','Instacart'], c:1 },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ q:'What is my favorite hobby?', a:['Learning Spanish','Marathons','The Gym','Knitting'], c:2 }</p>
+<p class="p1">];</p>
+<p class="p1">let qi=0, score=0, selected=null;</p>
+<p class="p1">function renderQuestion(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const stage = $('#quiz-stage'); const item = QUIZ[qi]; const total = QUIZ.length;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('#quiz-bar').style.width = `${(qi/total)*100}%`; $('#quiz-next').disabled = true; $('#quiz-feedback').textContent = '';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>stage.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="q"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="row"&gt;&lt;b&gt;Question ${qi+1} of ${total}&lt;/b&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;${item.q}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="answers" role="group" aria-label="Answers"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>${item.a.map((txt,i)=&gt;`&lt;label class="answer"&gt;&lt;input type="radio" name="a" value="${i}" /&gt;&lt;span&gt;${txt}&lt;/span&gt;&lt;/label&gt;`).join('')}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$$('.answer input', stage).forEach(input=&gt;{ input.addEventListener('change', e=&gt;{ selected=parseInt(e.target.value,10); $('#quiz-next').disabled=false; }); });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('#quiz-next').textContent = (qi===total-1)?'Finish':'Next'; $('#quiz-restart').hidden = true;</p>
+<p class="p1">}</p>
+<p class="p1">renderQuestion();</p>
+<p class="p1">$('#quiz-next').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (selected===null) return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const correct = QUIZ[qi].c; if (selected===correct){ score++; showFeedback(true);} else { showFeedback(false); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>setTimeout(()=&gt;{ qi++; selected=null; if (qi&lt;QUIZ.length){ renderQuestion(); } else { endQuiz(); } }, 550);</p>
+<p class="p1">});</p>
+<p class="p1">$('#quiz-restart').addEventListener('click', ()=&gt;{ qi=0; score=0; selected=null; renderQuestion(); });</p>
+<p class="p1">function showFeedback(ok){ const fb=$('#quiz-feedback'); fb.className='notice '+(ok?'ok':'nope'); fb.textContent= ok ? 'Correct! 🔥' : 'Close! Keep going 💪'; }</p>
+<p class="p1">function endQuiz(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const stage = $('#quiz-stage'); $('#quiz-bar').style.width = `100%`; const pass = score&gt;=3;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>stage.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="q center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h3 style="margin:0 0 8px 0;"&gt;Quiz Complete&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;You scored &lt;b&gt;${score}&lt;/b&gt; / ${QUIZ.length} — ${pass ? 'Nice job!' : 'Try again!'}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="spacer"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="row center" style="justify-content:center;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" id="quiz-restart-cta"&gt;Play Again&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('#quiz-next').disabled=true; $('#quiz-restart').hidden=false;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (pass) launchConfetti(850);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('#quiz-restart-cta')?.addEventListener('click', ()=&gt;{ qi=0; score=0; selected=null; renderQuestion(); });</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ========================= Confetti ========================= */</p>
+<p class="p1">const confettiCanvas = $('#confetti'), ctx = confettiCanvas.getContext('2d');</p>
+<p class="p1">let confettiPieces=[], confettiRunning=false;</p>
+<p class="p1">function resizeCanvas(){ confettiCanvas.width=window.innerWidth; confettiCanvas.height=window.innerHeight; }</p>
+<p class="p1">window.addEventListener('resize', resizeCanvas); resizeCanvas();</p>
+<p class="p1">function launchConfetti(n=600){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>for (let i=0;i&lt;n;i++){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>confettiPieces.push({ x:Math.random()*confettiCanvas.width, y:-10-Math.random()*40, r:2+Math.random()*4, a:Math.random()*Math.PI*2, s:1+Math.random()*2.5, w:.5+Math.random()*1.5, c: randomColor() });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!confettiRunning){ confettiRunning=true; requestAnimationFrame(tickConfetti); setTimeout(()=&gt;{ confettiPieces=[]; confettiRunning=false; clearCanvas(); }, 5000); }</p>
+<p class="p1">}</p>
+<p class="p1">function randomColor(){ const palette=['#FF7DAF','#FF9FB2','#F8D9E6','#FFDDE8','#67DEC7']; return palette[(Math.random()*palette.length)|0]; }</p>
+<p class="p1">function clearCanvas(){ ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height); }</p>
+<p class="p1">function tickConfetti(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>clearCanvas();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>confettiPieces.forEach(p=&gt;{ p.y+=p.s; p.x+=Math.sin(p.a)*p.w; p.a+=0.05;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.beginPath(); ctx.fillStyle=p.c; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>confettiPieces = confettiPieces.filter(p=&gt; p.y &lt; confettiCanvas.height + 10);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (confettiRunning) requestAnimationFrame(tickConfetti);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* Smooth-scroll for anchor links */</p>
+<p class="p1">$$('a[href^="#"]').forEach(a=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>a.addEventListener('click', (e)=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const id = a.getAttribute('href'); const el = document.querySelector(id);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!el) return; e.preventDefault(); el.scrollIntoView({behavior:'smooth'});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">});</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
 </body>
 </html>
